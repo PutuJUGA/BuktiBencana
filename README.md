@@ -1,56 +1,86 @@
-# Welcome to your Expo app 👋
+# BuktiBencana
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi mobile untuk **peringatan dini bencana** dan **dokumentasi kerusakan
+anti-manipulasi** berbasis komunitas. Proyek Tugas Besar Pemrograman Mobile,
+mendukung **SDG 11 (Sustainable Cities and Communities)**.
 
-## Get started
+## Latar Belakang
 
-1. Install dependencies
+Saat bencana, tanda bahaya awal sering terlambat diketahui, dan setelahnya
+korban kesulitan membuktikan kerusakan untuk mengajukan bantuan. BuktiBencana
+menjawab dua masalah itu dalam satu aplikasi.
 
-   ```bash
-   npm install
-   ```
+## Fitur Utama
 
-2. Start the app
+### Sebelum / saat bencana (peringatan dini)
 
-   ```bash
-   npx expo start
-   ```
+- Pelaporan tanda bahaya (retakan, tanggul bocor, genangan naik) dengan foto
+  ber-watermark koordinat dan waktu
+- Peta interaktif laporan warga (`react-native-maps`)
+- Penggabungan laporan berdekatan menjadi zona rawan dan level waspada
+  (Haversine + RxJS)
+- Geofencing: peringatan saat pengguna memasuki zona rawan
 
-In the output, you'll find options to open the app in a
+### Sesudah bencana (dokumentasi bukti)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Pengambilan foto langsung dari kamera dengan watermark koordinat dan waktu
+- Hash integritas untuk mendeteksi perubahan file setelah diambil
+- Penyimpanan paket bukti di Scoped Storage Document Vault (`expo-file-system`)
+- Kunci dan data sensitif terenkripsi (`expo-secure-store`)
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Verifikasi
 
-## Get a fresh project
+- Peran Verifikator (RT/relawan) untuk memvalidasi laporan warga
 
-When you're ready, run:
+## Teknologi
+
+| Kategori         | Library                                       |
+| ---------------- | --------------------------------------------- |
+| Framework        | React Native 0.88 (Expo SDK 58) + Expo Router |
+| State management | Zustand (Unidirectional Data Flow)            |
+| Reaktif          | RxJS                                          |
+| Peta & lokasi    | `react-native-maps`, `expo-location`          |
+| Keamanan         | `expo-secure-store`, `expo-crypto`            |
+| Penyimpanan      | `expo-file-system`                            |
+| Animasi          | `react-native-reanimated`                     |
+
+## Arsitektur
+
+- **State management:** Zustand dengan Unidirectional Data Flow
+- **Separation of Concerns:** custom hooks terpisah dari UI screen
+- **Pipeline reaktif:** RxJS (`debounceTime`, `distinctUntilChanged`, `switchMap`)
+- **Offline-first** dengan graceful fallback
+
+## Menjalankan Proyek
 
 ```bash
-npm run reset-project
+git clone https://github.com/PutuJUGA/BuktiBencana.git
+cd BuktiBencana
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Perintah pengembangan lainnya:
 
-### Other setup steps
+```bash
+npx expo lint       # linting
+npx tsc --noEmit    # type check
+npx expo-doctor     # diagnosis dependensi & konfigurasi
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+> **Catatan:** Library dengan kode native yang tidak dibundel di Expo Go
+> memerlukan development build:
+> `npx expo run:android` / `npx expo run:ios`, atau
+> `npx eas-cli@latest build --profile development`.
 
-## Learn more
+## Catatan
 
-To learn more about developing your project with Expo, look at the following resources:
+Data pada demo bersifat simulasi. Hash membuktikan file tidak diubah setelah
+diambil, bukan keabsahan hukum suatu klaim.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Tim
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Nama                         | NIM             |
+| ---------------------------- | --------------- |
+| Putu Bawa Givrant Januarta   | 202410370110474 |
+| Muhamad Michael Zaim Al Izzy | 202410370110447 |
